@@ -119,7 +119,7 @@ class Trial(Storage.Trial):
         # a bulk upsert.
         # See Also: comments in <https://github.com/microsoft/MLOS/pull/466>
         with self._engine.begin() as conn:
-            self._update_status(conn, status, timestamp)
+            # self._update_status(conn, status, timestamp)
         for (metric_ts, key, val) in metrics:
             with self._engine.begin() as conn:
                 try:
