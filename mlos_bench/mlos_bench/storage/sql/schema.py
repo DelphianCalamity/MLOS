@@ -47,7 +47,7 @@ class DbSchema:
     # pylint: disable=too-many-instance-attributes
 
     # Common string column sizes.
-    _ID_LEN = 255
+    _ID_LEN = 512
     _PARAM_VALUE_LEN = 1024
     _METRIC_VALUE_LEN = 255
     _STATUS_LEN = 16
@@ -199,11 +199,8 @@ class DbSchema:
         _LOG.info("Create the DB schema")
 
         inspector = inspect(self._engine)
-        # List of all the tables you expect to be created
         expected_tables = self._meta.tables.keys()
-        # Check if each table exists
         tables_exist = all([inspector.has_table(table_name) for table_name in expected_tables])
-        # If any table doesn't exist, create the schema
         if not tables_exist:
             self._meta.create_all(self._engine)
         return self

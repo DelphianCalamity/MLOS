@@ -6,6 +6,7 @@
 A collection Service functions for managing VMs on Azure.
 """
 
+import os
 import logging
 from base64 import b64decode
 from datetime import datetime
@@ -63,6 +64,15 @@ class AzureAuthService(Service, SupportsAuth):
 
         self._access_token = "RENEW *NOW*"
         self._token_expiration_ts = datetime.now(UTC)  # Typically, some future timestamp.
+
+        check_required_params(
+            self.config, {
+                "managedIdentityClientId",
+                "tenantId"
+            }
+        )
+        os.environ["AZURE_CLIENT_ID"] = self.config["managedIdentityClientId"]
+        os.environ["AZURE_TENANT_ID"] = self.config["tenantId"]
 
         # Login as the first identity available, usually ourselves or a managed identity
         self._cred: Union[azure_id.DefaultAzureCredential, azure_id.CertificateCredential]
